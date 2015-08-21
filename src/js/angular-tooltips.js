@@ -147,19 +147,25 @@
         $scope.initTooltip = function initTooltip(tooltipSide) {
           if (!$scope.isTooltipEmpty()) {
 
-            theTooltip.css('visibility', 'visible');
-
             height = thisElement[0].offsetHeight;
             width = thisElement[0].offsetWidth;
 
-            //get tooltip dimension
+            // We need to "show" the element temporarily to be able to "calculate the height" (display: none --> 0 height)
+            theTooltip.css('visibility', 'hidden');
+            theTooltip.css('display', 'block');
+            
+            // get tooltip dimension
             theTooltipHeight = theTooltip[0].offsetHeight;
             theTooltipWidth = theTooltip[0].offsetWidth;
+
+            // Reset the inlined css
+            theTooltip.css('visibility', '');
+            theTooltip.css('display', '');
 
             $scope.parseSpeed();
             $scope.tooltipPositioning(tooltipSide);
           } else {
-            theTooltip.css('visibility', 'hidden');
+            theTooltip.css('display', 'none');
           }
         };
 
@@ -257,7 +263,7 @@
 
         $scope.hideTooltip = function hideTooltip() {
 
-          theTooltip.css('transition', 'opacity ' + speed + 'ms linear, visibility 0s linear ' + speed + 'ms');
+          theTooltip.css('transition', 'opacity ' + speed + 'ms linear, display 0s linear ' + speed + 'ms');
           theTooltip.removeClass(CSS_PREFIX + 'open');
           $scope.clearTriggers();
           $scope.bindShowTriggers();
